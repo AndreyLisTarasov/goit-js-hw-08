@@ -1,40 +1,35 @@
 import throttle from 'lodash.throttle';
 
-const formRef = document.querySelector(`.feedback-form`);
-const FEEDBACK_FORM_KEY = 'feedback-form-state';
-const { email, message } = formRef;
+const formEl = document.querySelector(`.feedback-form`);
+const feedbackForm = 'feedback-form-state';
+const { email, message } = formEl;
 
-formRef.addEventListener(`input`, throttle(onGetFormValues, 1000));
-formRef.addEventListener(`submit`, onFormSubmit);
+formEl.addEventListener(`input`, throttle(onGetFormValues, 1000));
+formEl.addEventListener(`submit`, onFormSubmit);
 
 onPrintValuesFromStoreToTheForm();
 
-function onGetFormValues(e) {
-  localStorage.setItem(
-    FEEDBACK_FORM_KEY,
-    JSON.stringify({
-      email: email.value,
-      message: message.value,
+function onGetFormValues(evt) {
+  localStorage.setItem(feedbackForm, JSON.stringify
+    ({ email: email.value,
+       message: message.value,      
     })
   );
 }
 
 function onPrintValuesFromStoreToTheForm() {
-  const savedData = JSON.parse(localStorage.getItem(FEEDBACK_FORM_KEY));
-
+  const savedData = JSON.parse(localStorage.getItem(feedbackForm));
   if (savedData) {
     email.value = savedData.email;
     message.value = savedData.message;
   }
 }
 
-function onFormSubmit(e) {
-  e.preventDefault();
-
-  console.log(`Данні введені в форму: 
+function onFormSubmit(evt) {
+  evt.preventDefault();
+  console.log(`Дані введені в форму: 
   email  ${email.value} 
   message  ${message.value}`);
-
-  e.currentTarget.reset();
-  localStorage.removeItem(FEEDBACK_FORM_KEY);
+  evt.currentTarget.reset();
+  localStorage.removeItem(feedbackForm);
 }

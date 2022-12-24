@@ -3,12 +3,12 @@ import throttle from 'lodash.throttle';
 
 const iframe = document.querySelector('#vimeo-player');
 const player = new Player(iframe);
-const PLAYER_CURRENT_TIME = 'videoplayer-current-time';
+const currentTime = 'videoplayer-current-time';
 
 player.on(`timeupdate`, throttle(currentTimeOnVideo, 1000));
 player
-  .setCurrentTime(localStorage.getItem(PLAYER_CURRENT_TIME))
-  .then(localStorage.getItem(PLAYER_CURRENT_TIME))
+  .setCurrentTime(localStorage.getItem(currentTime))
+  .then(localStorage.getItem(currentTime))
   .catch(function (error) {
     switch (error.name) {
       case 'RangeError':
@@ -16,6 +16,6 @@ player
     }
   });
 
-function currentTimeOnVideo(e) {
-  localStorage.setItem(PLAYER_CURRENT_TIME, JSON.stringify(e.seconds));
+function currentTimeOnVideo(evt) {
+  localStorage.setItem(currentTime, JSON.stringify(evt.seconds));
 }
