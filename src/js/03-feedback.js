@@ -9,27 +9,25 @@ const { email, message } = formEl;
 formEl.addEventListener(`input`, throttle(onGetFormValues, 1000));
 formEl.addEventListener(`submit`, onFormSubmit);
 
+let formData = {};
+
 onPrintValuesFromStoreToTheForm();
 
 function onGetFormValues(evt) {
-  const formData = {
-    email: formEl.email.value,
-    message: formEl.message.value,
-  };
+  formData[evt.target.name] = evt.target.value;  
   localStorage.setItem(feedbackForm, JSON.stringify(formData));
 }
 
 function onPrintValuesFromStoreToTheForm() {
-  if (localStorage.getItem(feedbackForm)) {
-    const saveData = JSON.parse(localStorage.getItem(feedbackForm)) || {};
-
-    textarea.value = saveData.message || '';
-    input.value = saveData.email || '';
+  formData = JSON.parse(localStorage.getItem(feedbackForm)) || {};
+  if (formData) {
+    input.value = formData.email || '';
+    textarea.value = formData.message || '';
   }
 }
 
 function onFormSubmit(evt) {
-  evt.preventDefault();
+  evt.preventDefault();  
 
   const formDataObject = JSON.parse(localStorage.getItem(feedbackForm)) || {};
   console.log(formDataObject);
